@@ -1,0 +1,40 @@
+# I want to be extra safe so the compiler can optimize
+LANGUAGES   += c++
+COMPILEOPTS += -std=c++11
+COMPILEOPTS += -Wall
+COMPILEOPTS += -Wextra
+COMPILEOPTS += -pedantic
+COMPILEOPTS += -Werror
+
+# This magic invocation appears necessary to get GCC to unroll the
+# inner loop of my Histogram.
+LANGUAGES   += c++
+COMPILEOPTS += -O3 -march=native -funroll-loops
+COMPILEOPTS += -DNDEBUG
+
+# Build everything with debug info (but not debug mode)
+LANGUAGES   += c++
+COMPILEOPTS += -g
+LINKOPTS    += -g
+
+# I'm using pthreads because C++ threads seem to fall over and die...
+LANGUAGES   += c++
+COMPILEOPTS += -pthread
+LINKOPTS    += -pthread
+
+# Histogram calculators for various sizes of Intel machines
+BINARIES    += histogram-intel-1
+COMPILEOPTS += -DCORE_COUNT=1
+SOURCES     += histogram/intel.c++
+
+BINARIES    += histogram-intel-2
+COMPILEOPTS += -DCORE_COUNT=2
+SOURCES     += histogram/intel.c++
+
+BINARIES    += histogram-intel-4
+COMPILEOPTS += -DCORE_COUNT=4
+SOURCES     += histogram/intel.c++
+
+BINARIES    += histogram-intel-8
+COMPILEOPTS += -DCORE_COUNT=8
+SOURCES     += histogram/intel.c++
